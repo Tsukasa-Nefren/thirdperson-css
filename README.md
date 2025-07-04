@@ -1,5 +1,14 @@
 
+
 # ThirdPerson Revamped
+
+## Commands
+
+- `!tp`
+- `!thirdperson`
+- `css_thirdperson`
+
+Use any of these commands in chat or console to toggle third-person view.
 
 A simple third-person camera plugin for Counter-Strike 2.
 

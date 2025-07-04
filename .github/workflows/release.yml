@@ -3,7 +3,7 @@ name: Build and Release
 on:
   push:
     tags:
-      - 'v1.1.0'
+      - 'v0.0.1'
   workflow_dispatch:
 
 jobs:
@@ -25,6 +25,13 @@ jobs:
 
       - name: Build
         run: dotnet build ThirdPerson-Revamped.sln --configuration Release
+
+      - name: List build output
+        run: |
+          echo "ThirdPerson output:"
+          dir .\ThirdPerson\bin\Release\net8.0\
+          echo "CS2TraceRay output:"
+          dir .\CS2TraceRay\bin\Release\net8.0\
 
       - name: Create folders for packaging
         run: |

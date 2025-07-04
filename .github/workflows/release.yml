@@ -3,7 +3,7 @@ name: Build and Release
 on:
   push:
     tags:
-      - 'v0.0.1'
+      - 'v1.1.0'
   workflow_dispatch:
 
 jobs:
@@ -42,7 +42,7 @@ jobs:
       - name: Copy plugin DLLs and gamedata
         run: |
           copy .\ThirdPerson\bin\Release\net8.0\ThirdPersonRevamped.dll package\addons\counterstrikesharp\plugins\ThirdPersonRevamped\
-          copy .\CS2TraceRay\bin\Release\net8.0\CS2TraceRay.dll package\addons\counterstrikesharp\shared\CS2TraceRay\
+          copy .\ThirdPerson\bin\Release\net8.0\CS2TraceRay.dll package\addons\counterstrikesharp\shared\CS2TraceRay\
           copy .\CS2TraceRay\CS2TraceRay.gamedata.json package\addons\counterstrikesharp\gamedata\
 
       - name: Zip package (versioned)

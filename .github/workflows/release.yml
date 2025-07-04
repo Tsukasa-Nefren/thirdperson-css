@@ -1,0 +1,59 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v1.1.0'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    name: Build and Package
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore ThirdPerson-Revamped.sln
+
+      - name: Build
+        run: dotnet build ThirdPerson-Revamped.sln --configuration Release
+
+      - name: Create folders for packaging
+        run: |
+          mkdir -p package/addons/counterstrikesharp/plugins/ThirdPersonRevamped
+          mkdir -p package/addons/counterstrikesharp/shared/CS2TraceRay
+          mkdir -p package/addons/counterstrikesharp/gamedata
+
+      - name: Copy plugin DLLs and gamedata
+        run: |
+          copy .\ThirdPerson\bin\Release\net8.0\ThirdPersonRevamped.dll package\addons\counterstrikesharp\plugins\ThirdPersonRevamped\
+          copy .\CS2TraceRay\bin\Release\net8.0\CS2TraceRay.dll package\addons\counterstrikesharp\shared\CS2TraceRay\
+          copy .\CS2TraceRay\CS2TraceRay.gamedata.json package\addons\counterstrikesharp\gamedata\
+
+      - name: Zip package (versioned)
+        run: |
+          $version = if ($env:GITHUB_REF -match 'refs/tags/(.*)') { $matches[1] } else { 'latest' }
+          Compress-Archive -Path package/addons/* -DestinationPath "ThirdPersonRevamped-$version.zip"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ThirdPersonRevamped
+          path: ThirdPersonRevamped-*.zip
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ThirdPersonRevamped-*.zip
+          tag_name: ${{ github.ref_name }}
+          name: ThirdPersonRevamped ${{ github.ref_name }}
+          generate_release_notes: true

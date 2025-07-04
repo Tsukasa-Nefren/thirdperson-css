@@ -8,6 +8,11 @@ A simple third-person camera plugin for Counter-Strike 2.
 - Custom messages and config
 - Option to ignore walls for the camera (IgnoreWallForCamera)
 
+
+> ⚠️ **Known Issue:**
+> Bullets are fired from the third-person camera position, not the player's actual position.
+> This cannot be fixed currently due to game limitations.
+
 ## Installation
 
 
